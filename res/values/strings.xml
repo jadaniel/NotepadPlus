@@ -8,4 +8,10 @@
     <string name="body">Body</string>
     <string name="confirm">Confirm</string>
     <string name="edit_note">Edit Note</string>
+    <string name="note_edit_label">Please Edit Your Note</string>
+    
+    <!-- Menu Items -->
+    <string name="email">Send as Email</string>
+    <string name="text">Send as Text</string>
+    
 </resources>

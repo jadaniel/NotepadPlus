@@ -17,8 +17,13 @@
 package com.android.demo.notepad3;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -104,4 +109,38 @@ public class NoteEdit extends Activity {
     		mDbHelper.updateNote(mRowId, title, body);        
     	}    
     }
+    
+  //--Menus
+  		@Override
+  		public boolean onCreateOptionsMenu(Menu menu){
+  			MenuInflater inflater = getMenuInflater();
+  			inflater.inflate(R.menu.note_edit_menu, menu);
+  			return true;
+  		}
+  		
+  		@Override
+		public boolean onOptionsItemSelected(MenuItem item){
+  			Intent intent;
+			switch(item.getItemId()){
+			case R.id.email_activity:
+				intent = new Intent(Intent.ACTION_SEND); 
+				intent.setType("text/plain"); 
+				//emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"webmaster@website.com"}); 
+				intent.putExtra(Intent.EXTRA_SUBJECT, mTitleText.getText().toString()); 
+				intent.putExtra(Intent.EXTRA_TEXT, mBodyText.getText().toString()); 
+				//this.startActivity(Intent.createChooser(intent, "Send mail..."));
+				startActivity(intent);
+				return true;
+				
+			case R.id.text_activity:	//don't think this works the way I want
+				Uri smsUri = Uri.parse("sms:" + mTitleText.getText().toString() + " " + mBodyText.getText().toString());  
+                intent = new Intent(Intent.ACTION_VIEW, smsUri); 
+                startActivity(intent);
+                return true;
+			
+			default:
+				return super.onOptionsItemSelected(item); //good
+			}
+			
+		}
 }
