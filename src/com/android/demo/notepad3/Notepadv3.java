@@ -19,6 +19,7 @@ package com.android.demo.notepad3;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -35,6 +36,8 @@ public class Notepadv3 extends ListActivity {
 
     private static final int INSERT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
+    private static final int EMAIL_ID = Menu.FIRST + 2;
+    private static final int TEXT_ID = Menu.FIRST + 3;
 
     private NotesDbAdapter mDbHelper;
 
@@ -91,15 +94,33 @@ public class Notepadv3 extends ListActivity {
             ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, DELETE_ID, 0, R.string.menu_delete);
+        menu.add(0, EMAIL_ID, 0, R.string.email);
+        menu.add(0, TEXT_ID, 0, R.string.text);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+    	Intent intent;
         switch(item.getItemId()) {
             case DELETE_ID:
                 AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
                 mDbHelper.deleteNote(info.id);
                 fillData();
+                return true;
+            
+            case EMAIL_ID:
+				intent = new Intent(Intent.ACTION_SEND); 
+				intent.setType("text/plain"); 
+				intent.putExtra(Intent.EXTRA_SUBJECT, mTitleText.getText().toString()); 
+				intent.putExtra(Intent.EXTRA_TEXT, mBodyText.getText().toString()); 
+				startActivity(intent);
+				return true;
+				
+			case TEXT_ID:	
+				intent = new Intent(Intent.ACTION_VIEW); 
+				intent.setData(Uri.parse("sms:"));
+				intent.putExtra("sms_body", mTitleText.getText().toString() + " " + mBodyText.getText().toString()); 
+                startActivity(intent);
                 return true;
         }
         return super.onContextItemSelected(item);

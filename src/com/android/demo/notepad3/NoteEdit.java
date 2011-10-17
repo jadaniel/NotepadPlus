@@ -125,16 +125,17 @@ public class NoteEdit extends Activity {
 			case R.id.email_activity:
 				intent = new Intent(Intent.ACTION_SEND); 
 				intent.setType("text/plain"); 
-				//emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"webmaster@website.com"}); 
 				intent.putExtra(Intent.EXTRA_SUBJECT, mTitleText.getText().toString()); 
 				intent.putExtra(Intent.EXTRA_TEXT, mBodyText.getText().toString()); 
-				//this.startActivity(Intent.createChooser(intent, "Send mail..."));
 				startActivity(intent);
 				return true;
 				
 			case R.id.text_activity:	//don't think this works the way I want
-				Uri smsUri = Uri.parse("sms:" + mTitleText.getText().toString() + " " + mBodyText.getText().toString());  
-                intent = new Intent(Intent.ACTION_VIEW, smsUri); 
+				//Uri smsUri = Uri.parse("sms:" + mTitleText.getText().toString() + " " + mBodyText.getText().toString());  
+                //intent = new Intent(Intent.ACTION_VIEW, smsUri); 
+				intent = new Intent(Intent.ACTION_VIEW); 
+				intent.setData(Uri.parse("sms:"));
+				intent.putExtra("sms_body", mTitleText.getText().toString() + " " + mBodyText.getText().toString()); 
                 startActivity(intent);
                 return true;
 			
